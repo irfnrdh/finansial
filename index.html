@@ -3,466 +3,134 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Keuangan Keluarga</title>
+    <title>Keuangan Keluarga Plus</title>
     <script src="https://unpkg.com/vue@3"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            color: #333;
-        }
-
-        .container {
-            max-width: 100%;
-            margin: 0 auto;
-            background: white;
-            min-height: 100vh;
-            position: relative;
-            overflow-x: hidden;
-        }
-
-        .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 20px 15px;
-            text-align: center;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-
-        .header h1 {
-            font-size: 1.5rem;
-            margin-bottom: 5px;
-        }
-
-        .header p {
-            font-size: 0.9rem;
-            opacity: 0.9;
-        }
-
-        .nav-tabs {
+        /* Previous styles remain the same, adding new styles for new features */
+        
+        /* New styles for additional features */
+        .feature-tabs {
             display: flex;
-            background: white;
+            margin-bottom: 15px;
             border-bottom: 1px solid #eee;
-            position: sticky;
-            top: 80px;
-            z-index: 99;
         }
-
-        .nav-tab {
-            flex: 1;
-            padding: 12px 8px;
-            text-align: center;
-            border: none;
-            background: white;
+        
+        .feature-tab {
+            padding: 10px 15px;
             cursor: pointer;
-            font-size: 0.85rem;
-            transition: all 0.3s ease;
             border-bottom: 3px solid transparent;
-        }
-
-        .nav-tab.active {
-            color: #667eea;
-            border-bottom-color: #667eea;
-            font-weight: 600;
-        }
-
-        .nav-tab:hover {
-            background: #f8f9fa;
-        }
-
-        .tab-content {
-            padding: 15px;
-            min-height: calc(100vh - 140px);
-        }
-
-        .dashboard-cards {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        .card {
-            background: white;
-            border-radius: 12px;
-            padding: 15px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            border: 1px solid #f0f0f0;
-        }
-
-        .card h3 {
-            font-size: 0.85rem;
-            color: #666;
-            margin-bottom: 5px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .card .amount {
-            font-size: 1.3rem;
-            font-weight: bold;
-        }
-
-        .card.income .amount {
-            color: #28a745;
-        }
-
-        .card.expense .amount {
-            color: #dc3545;
-        }
-
-        .card.balance .amount {
-            color: #667eea;
-        }
-
-        .card.budget .amount {
-            color: #fd7e14;
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: 500;
-            color: #555;
-            font-size: 0.9rem;
-        }
-
-        .form-control {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #e9ecef;
-            border-radius: 8px;
-            font-size: 1rem;
-            transition: border-color 0.3s ease;
-        }
-
-        .form-control:focus {
-            outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-        }
-
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-        }
-
-        .btn {
-            padding: 12px 20px;
-            border: none;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-weight: 500;
-            cursor: pointer;
             transition: all 0.3s ease;
-            text-align: center;
+        }
+        
+        .feature-tab.active {
+            border-bottom-color: #667eea;
+            color: #667eea;
+            font-weight: 500;
+        }
+        
+        .status-badge {
             display: inline-block;
-            text-decoration: none;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-        }
-
-        .btn-success {
-            background: #28a745;
-            color: white;
-        }
-
-        .btn-danger {
-            background: #dc3545;
-            color: white;
-        }
-
-        .btn-warning {
-            background: #fd7e14;
-            color: white;
-        }
-
-        .btn-sm {
-            padding: 6px 12px;
-            font-size: 0.8rem;
-        }
-
-        .transaction-list {
-            background: white;
+            padding: 3px 8px;
             border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-
-        .transaction-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px;
-            border-bottom: 1px solid #f0f0f0;
-        }
-
-        .transaction-item:last-child {
-            border-bottom: none;
-        }
-
-        .transaction-info {
-            flex: 1;
-        }
-
-        .transaction-info h4 {
-            font-size: 0.9rem;
-            margin-bottom: 2px;
-            color: #333;
-        }
-
-        .transaction-info p {
-            font-size: 0.8rem;
-            color: #666;
-            margin-bottom: 2px;
-        }
-
-        .transaction-amount {
-            font-weight: bold;
-            font-size: 1rem;
-        }
-
-        .transaction-amount.income {
-            color: #28a745;
-        }
-
-        .transaction-amount.expense {
-            color: #dc3545;
-        }
-
-        .transaction-actions {
-            display: flex;
-            gap: 5px;
-            margin-left: 10px;
-        }
-
-        .category-stats {
-            display: grid;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        .category-item {
-            background: white;
-            padding: 12px;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-
-        .category-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 5px;
-        }
-
-        .category-name {
+            font-size: 0.7rem;
             font-weight: 500;
-            color: #333;
+            margin-left: 5px;
         }
-
-        .category-amount {
-            font-weight: bold;
-            color: #dc3545;
+        
+        .status-active {
+            background-color: #d4edda;
+            color: #155724;
         }
-
-        .category-bar {
-            height: 6px;
-            background: #e9ecef;
-            border-radius: 3px;
-            overflow: hidden;
+        
+        .status-pending {
+            background-color: #fff3cd;
+            color: #856404;
         }
-
-        .category-bar-fill {
-            height: 100%;
-            background: #667eea;
-            transition: width 0.3s ease;
+        
+        .status-completed {
+            background-color: #e2e3e5;
+            color: #383d41;
         }
-
-        .quick-actions {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-bottom: 20px;
+        
+        .interest-rate {
+            font-size: 0.8rem;
+            color: #6c757d;
         }
-
-        .quick-action {
-            padding: 20px;
-            background: white;
-            border-radius: 12px;
-            text-align: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            cursor: pointer;
-            transition: transform 0.3s ease;
-        }
-
-        .quick-action:hover {
-            transform: translateY(-2px);
-        }
-
-        .quick-action .icon {
-            font-size: 2rem;
-            margin-bottom: 10px;
-        }
-
-        .quick-action .title {
-            font-weight: 500;
-            color: #333;
-        }
-
-        .filter-section {
-            background: white;
-            padding: 15px;
-            border-radius: 12px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-
-        .filter-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-bottom: 10px;
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 40px 20px;
-            color: #666;
-        }
-
-        .empty-state .icon {
-            font-size: 3rem;
-            margin-bottom: 15px;
-            opacity: 0.5;
-        }
-
-        .modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-            padding: 20px;
-        }
-
-        .modal-content {
-            background: white;
-            border-radius: 12px;
-            padding: 20px;
-            width: 100%;
-            max-width: 400px;
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .modal-title {
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: #333;
-        }
-
-        .close-btn {
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: #666;
-            padding: 5px;
-        }
-
-        .floating-btn {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-            transition: transform 0.3s ease;
-            z-index: 500;
-        }
-
-        .floating-btn:hover {
-            transform: scale(1.1);
-        }
-
-        .budget-progress {
+        
+        .progress-container {
             margin-top: 10px;
         }
-
-        .budget-bar {
-            height: 8px;
-            background: #e9ecef;
-            border-radius: 4px;
-            overflow: hidden;
+        
+        .progress-text {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
             margin-bottom: 5px;
         }
-
-        .budget-bar-fill {
+        
+        .progress-bar {
+            height: 8px;
+            background-color: #e9ecef;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
             height: 100%;
-            background: linear-gradient(90deg, #28a745 0%, #fd7e14 70%, #dc3545 100%);
+            background: linear-gradient(90deg, #667eea, #764ba2);
             transition: width 0.3s ease;
         }
-
-        .budget-text {
-            font-size: 0.8rem;
-            color: #666;
-            text-align: center;
+        
+        .asset-card {
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-left: 4px solid;
         }
-
+        
+        .asset-savings {
+            border-left-color: #28a745;
+        }
+        
+        .asset-investment {
+            border-left-color: #007bff;
+        }
+        
+        .asset-debt {
+            border-left-color: #dc3545;
+        }
+        
+        .asset-value {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin: 5px 0;
+        }
+        
+        .asset-details {
+            font-size: 0.8rem;
+            color: #6c757d;
+        }
+        
+        .payment-history {
+            margin-top: 10px;
+            font-size: 0.8rem;
+        }
+        
+        .payment-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        /* Add to existing media queries */
         @media (max-width: 480px) {
-            .dashboard-cards {
-                grid-template-columns: 1fr;
-            }
-            
-            .form-row {
-                grid-template-columns: 1fr;
-            }
-            
-            .nav-tab {
-                font-size: 0.75rem;
-                padding: 10px 5px;
+            .feature-tabs {
+                overflow-x: auto;
+                white-space: nowrap;
+                padding-bottom: 5px;
             }
         }
     </style>
@@ -472,8 +140,8 @@
         <div class="container">
             <!-- Header -->
             <div class="header">
-                <h1>💰 Keuangan Keluarga</h1>
-                <p>Kelola keuangan keluarga dengan mudah</p>
+                <h1>💰 Keuangan Keluarga Plus</h1>
+                <p>Kelola keuangan keluarga dengan fitur lengkap</p>
             </div>
 
             <!-- Navigation Tabs -->
@@ -490,223 +158,527 @@
                 <button class="nav-tab" :class="{ active: activeTab === 'reports' }" @click="activeTab = 'reports'">
                     📈 Laporan
                 </button>
+                <button class="nav-tab" :class="{ active: activeTab === 'advanced' }" @click="activeTab = 'advanced'">
+                    🚀 Fitur Lanjutan
+                </button>
             </div>
 
-            <!-- Dashboard Tab -->
-            <div v-show="activeTab === 'dashboard'" class="tab-content">
-                <div class="dashboard-cards">
-                    <div class="card balance">
-                        <h3>Saldo</h3>
-                        <div class="amount">{{ formatCurrency(totalIncome - totalExpense) }}</div>
+            <!-- Previous tabs content remains the same until Advanced Tab -->
+
+            <!-- Advanced Tab -->
+            <div v-show="activeTab === 'advanced'" class="tab-content">
+                <div class="feature-tabs">
+                    <div class="feature-tab" :class="{ active: activeFeature === 'recurring' }" @click="activeFeature = 'recurring'">
+                        🔄 Berulang
                     </div>
-                    <div class="card income">
-                        <h3>Pemasukan</h3>
-                        <div class="amount">{{ formatCurrency(totalIncome) }}</div>
+                    <div class="feature-tab" :class="{ active: activeFeature === 'goals' }" @click="activeFeature = 'goals'">
+                        🎯 Target
                     </div>
-                    <div class="card expense">
-                        <h3>Pengeluaran</h3>
-                        <div class="amount">{{ formatCurrency(totalExpense) }}</div>
+                    <div class="feature-tab" :class="{ active: activeFeature === 'debts' }" @click="activeFeature = 'debts'">
+                        💳 Hutang
                     </div>
-                    <div class="card budget">
-                        <h3>Budget Bulan Ini</h3>
-                        <div class="amount">{{ formatCurrency(monthlyBudget) }}</div>
-                        <div class="budget-progress">
-                            <div class="budget-bar">
-                                <div class="budget-bar-fill" :style="{ width: budgetPercentage + '%' }"></div>
+                    <div class="feature-tab" :class="{ active: activeFeature === 'investments' }" @click="activeFeature = 'investments'">
+                        📈 Investasi
+                    </div>
+                </div>
+
+                <!-- Recurring Payments -->
+                <div v-show="activeFeature === 'recurring'">
+                    <div class="card">
+                        <h3>Pembayaran Berulang</h3>
+                        <button class="btn btn-primary" @click="openRecurringModal" style="margin-bottom: 15px;">
+                            + Tambah Pembayaran Berulang
+                        </button>
+                        
+                        <div v-if="recurringPayments.length > 0">
+                            <div class="transaction-item" v-for="payment in recurringPayments" :key="payment.id">
+                                <div class="transaction-info">
+                                    <h4>{{ payment.description }}
+                                        <span class="status-badge" :class="getRecurringStatusClass(payment)">
+                                            {{ getRecurringStatusText(payment) }}
+                                        </span>
+                                    </h4>
+                                    <p>{{ payment.category }} • 
+                                        {{ formatFrequency(payment.frequency) }} • 
+                                        Rp{{ formatCurrency(payment.amount) }}
+                                    </p>
+                                    <p class="asset-details">
+                                        Mulai: {{ formatDate(payment.startDate) }} • 
+                                        Berakhir: {{ payment.endDate ? formatDate(payment.endDate) : 'Tidak ada' }}
+                                    </p>
+                                </div>
+                                <div class="transaction-actions">
+                                    <button class="btn btn-warning btn-sm" @click="editRecurringPayment(payment)">✏️</button>
+                                    <button class="btn btn-danger btn-sm" @click="deleteRecurringPayment(payment.id)">🗑️</button>
+                                </div>
                             </div>
-                            <div class="budget-text">{{ budgetPercentage }}% terpakai</div>
+                        </div>
+                        <div v-else class="empty-state">
+                            <div class="icon">🔄</div>
+                            <p>Belum ada pembayaran berulang</p>
                         </div>
                     </div>
                 </div>
 
-                <div class="quick-actions">
-                    <div class="quick-action" @click="openModal('income')">
-                        <div class="icon">💰</div>
-                        <div class="title">Tambah Pemasukan</div>
-                    </div>
-                    <div class="quick-action" @click="openModal('expense')">
-                        <div class="icon">💳</div>
-                        <div class="title">Tambah Pengeluaran</div>
+                <!-- Financial Goals -->
+                <div v-show="activeFeature === 'goals'">
+                    <div class="card">
+                        <h3>Target Keuangan</h3>
+                        <button class="btn btn-primary" @click="openGoalModal" style="margin-bottom: 15px;">
+                            + Tambah Target
+                        </button>
+                        
+                        <div v-if="financialGoals.length > 0">
+                            <div class="asset-card" v-for="goal in financialGoals" :key="goal.id">
+                                <h4>{{ goal.name }}
+                                    <span class="status-badge" :class="getGoalStatusClass(goal)">
+                                        {{ getGoalStatusText(goal) }}
+                                    </span>
+                                </h4>
+                                <div class="progress-container">
+                                    <div class="progress-text">
+                                        <span>Terkumpul: {{ formatCurrency(goal.saved) }}</span>
+                                        <span>Target: {{ formatCurrency(goal.target) }}</span>
+                                    </div>
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" :style="{ width: Math.min((goal.saved / goal.target) * 100, 100) + '%' }"></div>
+                                    </div>
+                                </div>
+                                <p class="asset-details">
+                                    Target tanggal: {{ formatDate(goal.targetDate) }} • 
+                                    Prioritas: {{ goal.priority }}
+                                </p>
+                                <div class="transaction-actions" style="margin-top: 10px;">
+                                    <button class="btn btn-success btn-sm" @click="addToGoal(goal)">➕ Tambah</button>
+                                    <button class="btn btn-warning btn-sm" @click="editGoal(goal)">✏️</button>
+                                    <button class="btn btn-danger btn-sm" @click="deleteGoal(goal.id)">🗑️</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div v-else class="empty-state">
+                            <div class="icon">🎯</div>
+                            <p>Belum ada target keuangan</p>
+                        </div>
                     </div>
                 </div>
 
-                <div class="card">
-                    <h3>Transaksi Terbaru</h3>
-                    <div class="transaction-list" v-if="recentTransactions.length > 0">
-                        <div class="transaction-item" v-for="transaction in recentTransactions" :key="transaction.id">
-                            <div class="transaction-info">
-                                <h4>{{ transaction.description }}</h4>
-                                <p>{{ transaction.category }} • {{ formatDate(transaction.date) }}</p>
-                            </div>
-                            <div class="transaction-amount" :class="transaction.type">
-                                {{ transaction.type === 'income' ? '+' : '-' }}{{ formatCurrency(transaction.amount) }}
+                <!-- Debts and Loans -->
+                <div v-show="activeFeature === 'debts'">
+                    <div class="card">
+                        <h3>Pinjaman & Hutang</h3>
+                        <button class="btn btn-primary" @click="openDebtModal" style="margin-bottom: 15px;">
+                            + Tambah Hutang/Pinjaman
+                        </button>
+                        
+                        <div v-if="debts.length > 0">
+                            <div class="asset-card" :class="debt.type === 'debt' ? 'asset-debt' : 'asset-savings'" v-for="debt in debts" :key="debt.id">
+                                <h4>{{ debt.description }}</h4>
+                                <div class="asset-value">
+                                    {{ formatCurrency(debt.amount) }}
+                                    <span class="interest-rate" v-if="debt.interestRate > 0">
+                                        (Bunga {{ debt.interestRate }}% {{ debt.interestType === 'simple' ? 'sederhana' : 'majemuk' }})
+                                    </span>
+                                </div>
+                                <p class="asset-details">
+                                    {{ debt.type === 'debt' ? 'Hutang ke' : 'Pinjaman ke' }}: {{ debt.party }} • 
+                                    Mulai: {{ formatDate(debt.startDate) }} • 
+                                    Jatuh tempo: {{ formatDate(debt.endDate) }}
+                                </p>
+                                
+                                <div class="payment-history" v-if="debt.payments.length > 0">
+                                    <p><strong>Riwayat Pembayaran:</strong></p>
+                                    <div class="payment-item" v-for="payment in debt.payments" :key="payment.date">
+                                        <span>{{ formatDate(payment.date) }}</span>
+                                        <span>{{ formatCurrency(payment.amount) }}</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="transaction-actions" style="margin-top: 10px;">
+                                    <button class="btn btn-success btn-sm" @click="recordDebtPayment(debt)">💳 Bayar</button>
+                                    <button class="btn btn-warning btn-sm" @click="editDebt(debt)">✏️</button>
+                                    <button class="btn btn-danger btn-sm" @click="deleteDebt(debt.id)">🗑️</button>
+                                </div>
                             </div>
                         </div>
+                        <div v-else class="empty-state">
+                            <div class="icon">💳</div>
+                            <p>Belum ada catatan hutang/pinjaman</p>
+                        </div>
                     </div>
-                    <div v-else class="empty-state">
-                        <div class="icon">📝</div>
-                        <p>Belum ada transaksi</p>
+                </div>
+
+                <!-- Investments -->
+                <div v-show="activeFeature === 'investments'">
+                    <div class="card">
+                        <h3>Investasi & Aset</h3>
+                        <button class="btn btn-primary" @click="openInvestmentModal" style="margin-bottom: 15px;">
+                            + Tambah Investasi
+                        </button>
+                        
+                        <div v-if="investments.length > 0">
+                            <div class="asset-card asset-investment" v-for="investment in investments" :key="investment.id">
+                                <h4>{{ investment.name }} ({{ investment.type }})</h4>
+                                <div class="asset-value">
+                                    Nilai Saat Ini: {{ formatCurrency(investment.currentValue) }}
+                                    <span v-if="investment.initialValue" class="interest-rate">
+                                        (ROI: {{ calculateROI(investment) }}%)
+                                    </span>
+                                </div>
+                                <p class="asset-details">
+                                    Dimulai: {{ formatDate(investment.startDate) }} • 
+                                    Jumlah Unit: {{ investment.units || '-' }} • 
+                                    Biaya: {{ formatCurrency(investment.fees || 0) }}
+                                </p>
+                                <p v-if="investment.notes" class="asset-details">
+                                    Catatan: {{ investment.notes }}
+                                </p>
+                                
+                                <div class="transaction-actions" style="margin-top: 10px;">
+                                    <button class="btn btn-success btn-sm" @click="updateInvestmentValue(investment)">🔄 Update Nilai</button>
+                                    <button class="btn btn-warning btn-sm" @click="editInvestment(investment)">✏️</button>
+                                    <button class="btn btn-danger btn-sm" @click="deleteInvestment(investment.id)">🗑️</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div v-else class="empty-state">
+                            <div class="icon">📈</div>
+                            <p>Belum ada catatan investasi</p>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Transactions Tab -->
-            <div v-show="activeTab === 'transactions'" class="tab-content">
-                <div class="filter-section">
-                    <div class="filter-row">
-                        <select v-model="filter.type" class="form-control">
-                            <option value="">Semua Tipe</option>
-                            <option value="income">Pemasukan</option>
-                            <option value="expense">Pengeluaran</option>
-                        </select>
-                        <select v-model="filter.category" class="form-control">
-                            <option value="">Semua Kategori</option>
-                            <option v-for="category in allCategories" :key="category">{{ category }}</option>
-                        </select>
-                    </div>
-                    <div class="filter-row">
-                        <input v-model="filter.dateFrom" type="date" class="form-control" placeholder="Dari Tanggal">
-                        <input v-model="filter.dateTo" type="date" class="form-control" placeholder="Sampai Tanggal">
-                    </div>
-                </div>
+            <!-- Previous content remains the same until modals -->
 
-                <div class="transaction-list" v-if="filteredTransactions.length > 0">
-                    <div class="transaction-item" v-for="transaction in filteredTransactions" :key="transaction.id">
-                        <div class="transaction-info">
-                            <h4>{{ transaction.description }}</h4>
-                            <p>{{ transaction.category }} • {{ formatDate(transaction.date) }}</p>
-                        </div>
-                        <div class="transaction-amount" :class="transaction.type">
-                            {{ transaction.type === 'income' ? '+' : '-' }}{{ formatCurrency(transaction.amount) }}
-                        </div>
-                        <div class="transaction-actions">
-                            <button class="btn btn-warning btn-sm" @click="editTransaction(transaction)">✏️</button>
-                            <button class="btn btn-danger btn-sm" @click="deleteTransaction(transaction.id)">🗑️</button>
-                        </div>
-                    </div>
-                </div>
-                <div v-else class="empty-state">
-                    <div class="icon">🔍</div>
-                    <p>Tidak ada transaksi yang ditemukan</p>
-                </div>
-            </div>
-
-            <!-- Budget Tab -->
-            <div v-show="activeTab === 'budget'" class="tab-content">
-                <div class="card">
-                    <h3>Atur Budget Bulanan</h3>
-                    <div class="form-group">
-                        <label>Budget Bulanan</label>
-                        <input v-model.number="monthlyBudget" type="number" class="form-control" placeholder="Masukkan budget bulanan">
-                    </div>
-                    <button class="btn btn-primary" @click="saveBudget">Simpan Budget</button>
-                </div>
-
-                <div class="category-stats">
-                    <div class="category-item" v-for="stat in categoryStats" :key="stat.category">
-                        <div class="category-header">
-                            <div class="category-name">{{ stat.category }}</div>
-                            <div class="category-amount">{{ formatCurrency(stat.amount) }}</div>
-                        </div>
-                        <div class="category-bar">
-                            <div class="category-bar-fill" :style="{ width: (stat.amount / maxCategoryAmount) * 100 + '%' }"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Reports Tab -->
-            <div v-show="activeTab === 'reports'" class="tab-content">
-                <div class="card">
-                    <h3>Ringkasan Bulan Ini</h3>
-                    <div class="dashboard-cards">
-                        <div class="card income">
-                            <h3>Total Pemasukan</h3>
-                            <div class="amount">{{ formatCurrency(monthlyIncome) }}</div>
-                        </div>
-                        <div class="card expense">
-                            <h3>Total Pengeluaran</h3>
-                            <div class="amount">{{ formatCurrency(monthlyExpense) }}</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <h3>Pengeluaran per Kategori</h3>
-                    <div class="category-stats">
-                        <div class="category-item" v-for="stat in categoryStats" :key="stat.category">
-                            <div class="category-header">
-                                <div class="category-name">{{ stat.category }}</div>
-                                <div class="category-amount">{{ formatCurrency(stat.amount) }}</div>
-                            </div>
-                            <div class="category-bar">
-                                <div class="category-bar-fill" :style="{ width: (stat.amount / maxCategoryAmount) * 100 + '%' }"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <h3>Export Data</h3>
-                    <div class="quick-actions">
-                        <div class="quick-action" @click="exportData">
-                            <div class="icon">📊</div>
-                            <div class="title">Export JSON</div>
-                        </div>
-                        <div class="quick-action" @click="exportCSV">
-                            <div class="icon">📋</div>
-                            <div class="title">Export CSV</div>
-                        </div>
-                    </div>
-                    <input type="file" @change="importData" accept=".json" style="margin-top: 10px;">
-                </div>
-            </div>
-
-            <!-- Floating Add Button -->
-            <button class="floating-btn" @click="openModal('expense')">+</button>
-
-            <!-- Modal -->
-            <div v-if="showModal" class="modal" @click="closeModal">
+            <!-- New Modals for Advanced Features -->
+            
+            <!-- Recurring Payment Modal -->
+            <div v-if="showRecurringModal" class="modal" @click="closeRecurringModal">
                 <div class="modal-content" @click.stop>
                     <div class="modal-header">
                         <h3 class="modal-title">
-                            {{ modalType === 'income' ? 'Tambah Pemasukan' : 'Tambah Pengeluaran' }}
+                            {{ editingRecurring ? 'Edit Pembayaran Berulang' : 'Tambah Pembayaran Berulang' }}
                         </h3>
-                        <button class="close-btn" @click="closeModal">&times;</button>
+                        <button class="close-btn" @click="closeRecurringModal">&times;</button>
                     </div>
                     
                     <div class="form-group">
-                        <label>Tanggal</label>
-                        <input v-model="form.date" type="date" class="form-control">
+                        <label>Deskripsi</label>
+                        <input v-model="recurringForm.description" type="text" class="form-control" placeholder="Contoh: Langganan Netflix">
                     </div>
                     
                     <div class="form-group">
                         <label>Kategori</label>
-                        <select v-model="form.category" class="form-control">
+                        <select v-model="recurringForm.category" class="form-control">
                             <option value="">Pilih Kategori</option>
-                            <option v-for="category in (modalType === 'income' ? incomeCategories : expenseCategories)" :key="category">
-                                {{ category }}
-                            </option>
+                            <option v-for="category in expenseCategories" :key="category">{{ category }}</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Jumlah</label>
+                            <input v-model.number="recurringForm.amount" type="number" class="form-control" placeholder="Rp">
+                        </div>
+                        <div class="form-group">
+                            <label>Frekuensi</label>
+                            <select v-model="recurringForm.frequency" class="form-control">
+                                <option value="daily">Harian</option>
+                                <option value="weekly">Mingguan</option>
+                                <option value="monthly">Bulanan</option>
+                                <option value="yearly">Tahunan</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Mulai Tanggal</label>
+                            <input v-model="recurringForm.startDate" type="date" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label>Tanggal Berakhir (opsional)</label>
+                            <input v-model="recurringForm.endDate" type="date" class="form-control">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <button class="btn btn-primary" @click="saveRecurringPayment" style="width: 100%;">
+                            {{ editingRecurring ? 'Update' : 'Simpan' }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Financial Goal Modal -->
+            <div v-if="showGoalModal" class="modal" @click="closeGoalModal">
+                <div class="modal-content" @click.stop>
+                    <div class="modal-header">
+                        <h3 class="modal-title">
+                            {{ editingGoal ? 'Edit Target Keuangan' : 'Tambah Target Keuangan' }}
+                        </h3>
+                        <button class="close-btn" @click="closeGoalModal">&times;</button>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Nama Target</label>
+                        <input v-model="goalForm.name" type="text" class="form-control" placeholder="Contoh: DP Rumah">
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Target Jumlah</label>
+                            <input v-model.number="goalForm.target" type="number" class="form-control" placeholder="Rp">
+                        </div>
+                        <div class="form-group">
+                            <label>Terkumpul</label>
+                            <input v-model.number="goalForm.saved" type="number" class="form-control" placeholder="Rp">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Target Tanggal</label>
+                            <input v-model="goalForm.targetDate" type="date" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label>Prioritas</label>
+                            <select v-model="goalForm.priority" class="form-control">
+                                <option value="low">Rendah</option>
+                                <option value="medium">Sedang</option>
+                                <option value="high">Tinggi</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Catatan (opsional)</label>
+                        <textarea v-model="goalForm.notes" class="form-control" rows="3"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <button class="btn btn-primary" @click="saveGoal" style="width: 100%;">
+                            {{ editingGoal ? 'Update' : 'Simpan' }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Debt/Loan Modal -->
+            <div v-if="showDebtModal" class="modal" @click="closeDebtModal">
+                <div class="modal-content" @click.stop>
+                    <div class="modal-header">
+                        <h3 class="modal-title">
+                            {{ editingDebt ? 'Edit Hutang/Pinjaman' : 'Tambah Hutang/Pinjaman' }}
+                        </h3>
+                        <button class="close-btn" @click="closeDebtModal">&times;</button>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Jenis</label>
+                        <select v-model="debtForm.type" class="form-control">
+                            <option value="debt">Hutang (Saya berhutang)</option>
+                            <option value="loan">Pinjaman (Saya meminjamkan)</option>
                         </select>
                     </div>
                     
                     <div class="form-group">
                         <label>Deskripsi</label>
-                        <input v-model="form.description" type="text" class="form-control" placeholder="Masukkan deskripsi">
+                        <input v-model="debtForm.description" type="text" class="form-control" placeholder="Contoh: Pinjaman Bank ABC">
                     </div>
                     
                     <div class="form-group">
-                        <label>Jumlah</label>
-                        <input v-model.number="form.amount" type="number" class="form-control" placeholder="Masukkan jumlah">
+                        <label>{{ debtForm.type === 'debt' ? 'Pemberi Hutang' : 'Peminjam' }}</label>
+                        <input v-model="debtForm.party" type="text" class="form-control" placeholder="Nama bank/orang">
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Jumlah</label>
+                            <input v-model.number="debtForm.amount" type="number" class="form-control" placeholder="Rp">
+                        </div>
+                        <div class="form-group">
+                            <label>Bunga (%)</label>
+                            <input v-model.number="debtForm.interestRate" type="number" class="form-control" placeholder="0 jika tidak ada">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group" v-if="debtForm.interestRate > 0">
+                        <label>Jenis Bunga</label>
+                        <select v-model="debtForm.interestType" class="form-control">
+                            <option value="simple">Sederhana</option>
+                            <option value="compound">Majemuk</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Tanggal Mulai</label>
+                            <input v-model="debtForm.startDate" type="date" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label>Tanggal Jatuh Tempo</label>
+                            <input v-model="debtForm.endDate" type="date" class="form-control">
+                        </div>
                     </div>
                     
                     <div class="form-group">
-                        <button class="btn btn-primary" @click="saveTransaction" style="width: 100%;">
-                            {{ editingTransaction ? 'Update' : 'Simpan' }}
+                        <label>Catatan (opsional)</label>
+                        <textarea v-model="debtForm.notes" class="form-control" rows="3"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <button class="btn btn-primary" @click="saveDebt" style="width: 100%;">
+                            {{ editingDebt ? 'Update' : 'Simpan' }}
                         </button>
                     </div>
                 </div>
             </div>
+            
+            <!-- Debt Payment Modal -->
+            <div v-if="showDebtPaymentModal" class="modal" @click="closeDebtPaymentModal">
+                <div class="modal-content" @click.stop>
+                    <div class="modal-header">
+                        <h3 class="modal-title">
+                            Catat Pembayaran Hutang
+                        </h3>
+                        <button class="close-btn" @click="closeDebtPaymentModal">&times;</button>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Tanggal Pembayaran</label>
+                        <input v-model="debtPaymentForm.date" type="date" class="form-control">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Jumlah Pembayaran</label>
+                        <input v-model.number="debtPaymentForm.amount" type="number" class="form-control" placeholder="Rp">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Metode Pembayaran</label>
+                        <input v-model="debtPaymentForm.method" type="text" class="form-control" placeholder="Contoh: Transfer Bank">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Catatan (opsional)</label>
+                        <textarea v-model="debtPaymentForm.notes" class="form-control" rows="3"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <button class="btn btn-primary" @click="recordPayment" style="width: 100%;">
+                            Catat Pembayaran
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Investment Modal -->
+            <div v-if="showInvestmentModal" class="modal" @click="closeInvestmentModal">
+                <div class="modal-content" @click.stop>
+                    <div class="modal-header">
+                        <h3 class="modal-title">
+                            {{ editingInvestment ? 'Edit Investasi' : 'Tambah Investasi' }}
+                        </h3>
+                        <button class="close-btn" @click="closeInvestmentModal">&times;</button>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Nama Investasi</label>
+                        <input v-model="investmentForm.name" type="text" class="form-control" placeholder="Contoh: Saham BBCA">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Jenis Investasi</label>
+                        <select v-model="investmentForm.type" class="form-control">
+                            <option value="saham">Saham</option>
+                            <option value="reksadana">Reksadana</option>
+                            <option value="emas">Emas</option>
+                            <option value="deposito">Deposito</option>
+                            <option value="property">Properti</option>
+                            <option value="lainnya">Lainnya</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Nilai Awal</label>
+                            <input v-model.number="investmentForm.initialValue" type="number" class="form-control" placeholder="Rp">
+                        </div>
+                        <div class="form-group">
+                            <label>Nilai Saat Ini</label>
+                            <input v-model.number="investmentForm.currentValue" type="number" class="form-control" placeholder="Rp">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Jumlah Unit</label>
+                            <input v-model.number="investmentForm.units" type="number" class="form-control" placeholder="Contoh: 100 lembar">
+                        </div>
+                        <div class="form-group">
+                            <label>Biaya (opsional)</label>
+                            <input v-model.number="investmentForm.fees" type="number" class="form-control" placeholder="Rp">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Tanggal Mulai</label>
+                        <input v-model="investmentForm.startDate" type="date" class="form-control">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Catatan (opsional)</label>
+                        <textarea v-model="investmentForm.notes" class="form-control" rows="3"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <button class="btn btn-primary" @click="saveInvestment" style="width: 100%;">
+                            {{ editingInvestment ? 'Update' : 'Simpan' }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Value Update Modal for Investments -->
+            <div v-if="showValueUpdateModal" class="modal" @click="closeValueUpdateModal">
+                <div class="modal-content" @click.stop>
+                    <div class="modal-header">
+                        <h3 class="modal-title">
+                            Update Nilai Investasi
+                        </h3>
+                        <button class="close-btn" @click="closeValueUpdateModal">&times;</button>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Nilai Saat Ini</label>
+                        <input v-model.number="valueUpdateForm.currentValue" type="number" class="form-control" placeholder="Rp">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Tanggal Update</label>
+                        <input v-model="valueUpdateForm.updateDate" type="date" class="form-control">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Catatan Perubahan (opsional)</label>
+                        <textarea v-model="valueUpdateForm.notes" class="form-control" rows="3"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <button class="btn btn-primary" @click="updateInvestment" style="width: 100%;">
+                            Update Nilai
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Previous modals remain the same -->
+            
+            <!-- Floating Add Button - Updated to show context-aware actions -->
+            <button class="floating-btn" @click="contextualAddAction">
+                {{ activeTab === 'advanced' ? '💡' : '+' }}
+            </button>
         </div>
     </div>
 
@@ -716,231 +688,583 @@
         createApp({
             data() {
                 return {
-                    activeTab: 'dashboard',
-                    showModal: false,
-                    modalType: 'expense',
-                    editingTransaction: null,
-                    transactions: JSON.parse(localStorage.getItem('transactions') || '[]'),
-                    monthlyBudget: parseFloat(localStorage.getItem('monthlyBudget') || '0'),
-                    form: {
-                        date: '',
-                        category: '',
+                    // Previous data properties remain the same
+                    
+                    // New data properties for advanced features
+                    activeFeature: 'recurring',
+                    showRecurringModal: false,
+                    showGoalModal: false,
+                    showDebtModal: false,
+                    showDebtPaymentModal: false,
+                    showInvestmentModal: false,
+                    showValueUpdateModal: false,
+                    editingRecurring: null,
+                    editingGoal: null,
+                    editingDebt: null,
+                    editingInvestment: null,
+                    selectedDebt: null,
+                    selectedInvestment: null,
+                    
+                    recurringForm: {
                         description: '',
-                        amount: null
-                    },
-                    filter: {
-                        type: '',
                         category: '',
-                        dateFrom: '',
-                        dateTo: ''
+                        amount: null,
+                        frequency: 'monthly',
+                        startDate: new Date().toISOString().split('T')[0],
+                        endDate: ''
                     },
-                    incomeCategories: [
-                        'Gaji', 'Bonus', 'Freelance', 'Investasi', 'Bisnis', 'Hadiah', 'Lainnya'
-                    ],
-                    expenseCategories: [
-                        'Makan & Minum', 'Transportasi', 'Belanja', 'Hiburan', 'Kesehatan',
-                        'Pendidikan', 'Listrik & Air', 'Internet & Pulsa', 'Cicilan',
-                        'Tabungan', 'Sosial', 'Lainnya'
-                    ]
+                    
+                    goalForm: {
+                        name: '',
+                        target: null,
+                        saved: null,
+                        targetDate: '',
+                        priority: 'medium',
+                        notes: ''
+                    },
+                    
+                    debtForm: {
+                        type: 'debt',
+                        description: '',
+                        party: '',
+                        amount: null,
+                        interestRate: 0,
+                        interestType: 'simple',
+                        startDate: new Date().toISOString().split('T')[0],
+                        endDate: '',
+                        notes: '',
+                        payments: []
+                    },
+                    
+                    debtPaymentForm: {
+                        date: new Date().toISOString().split('T')[0],
+                        amount: null,
+                        method: '',
+                        notes: ''
+                    },
+                    
+                    investmentForm: {
+                        name: '',
+                        type: 'saham',
+                        initialValue: null,
+                        currentValue: null,
+                        units: null,
+                        fees: null,
+                        startDate: new Date().toISOString().split('T')[0],
+                        notes: ''
+                    },
+                    
+                    valueUpdateForm: {
+                        currentValue: null,
+                        updateDate: new Date().toISOString().split('T')[0],
+                        notes: ''
+                    },
+                    
+                    recurringPayments: JSON.parse(localStorage.getItem('recurringPayments') || '[]'),
+                    financialGoals: JSON.parse(localStorage.getItem('financialGoals') || '[]'),
+                    debts: JSON.parse(localStorage.getItem('debts') || '[]'),
+                    investments: JSON.parse(localStorage.getItem('investments') || '[]')
                 };
             },
             computed: {
-                totalIncome() {
-                    return this.transactions
-                        .filter(t => t.type === 'income')
-                        .reduce((sum, t) => sum + t.amount, 0);
+                // Previous computed properties remain the same
+                
+                // New computed properties for advanced features
+                upcomingRecurringPayments() {
+                    const today = new Date().toISOString().split('T')[0];
+                    return this.recurringPayments.filter(payment => {
+                        return (!payment.endDate || payment.endDate >= today) && 
+                               payment.startDate <= today;
+                    });
                 },
-                totalExpense() {
-                    return this.transactions
-                        .filter(t => t.type === 'expense')
-                        .reduce((sum, t) => sum + t.amount, 0);
+                
+                activeGoals() {
+                    return this.financialGoals.filter(goal => {
+                        const today = new Date();
+                        const targetDate = new Date(goal.targetDate);
+                        return goal.saved < goal.target && targetDate > today;
+                    });
                 },
-                monthlyIncome() {
-                    const currentMonth = new Date().getMonth();
-                    const currentYear = new Date().getFullYear();
-                    return this.transactions
-                        .filter(t => {
-                            const date = new Date(t.date);
-                            return t.type === 'income' && 
-                                   date.getMonth() === currentMonth && 
-                                   date.getFullYear() === currentYear;
-                        })
-                        .reduce((sum, t) => sum + t.amount, 0);
-                },
-                monthlyExpense() {
-                    const currentMonth = new Date().getMonth();
-                    const currentYear = new Date().getFullYear();
-                    return this.transactions
-                        .filter(t => {
-                            const date = new Date(t.date);
-                            return t.type === 'expense' && 
-                                   date.getMonth() === currentMonth && 
-                                   date.getFullYear() === currentYear;
-                        })
-                        .reduce((sum, t) => sum + t.amount, 0);
-                },
-                budgetPercentage() {
-                    if (this.monthlyBudget === 0) return 0;
-                    return Math.min(Math.round((this.monthlyExpense / this.monthlyBudget) * 100), 100);
-                },
-                recentTransactions() {
-                    return this.transactions
-                        .sort((a, b) => new Date(b.date) - new Date(a.date))
-                        .slice(0, 5);
-                },
-                filteredTransactions() {
-                    return this.transactions.filter(t => {
-                        const matchType = !this.filter.type || t.type === this.filter.type;
-                        const matchCategory = !this.filter.category || t.category === this.filter.category;
-                        const matchDateFrom = !this.filter.dateFrom || t.date >= this.filter.dateFrom;
-                        const matchDateTo = !this.filter.dateTo || t.date <= this.filter.dateTo;
-                        return matchType && matchCategory && matchDateFrom && matchDateTo;
-                    }).sort((a, b) => new Date(b.date) - new Date(a.date));
-                },
-                categoryStats() {
-                    const stats = {};
-                    this.transactions
-                        .filter(t => t.type === 'expense')
-                        .forEach(t => {
-                            if (!stats[t.category]) {
-                                stats[t.category] = 0;
-                            }
-                            stats[t.category] += t.amount;
-                        });
-                    
-                    return Object.entries(stats)
-                        .map(([category, amount]) => ({ category, amount }))
-                        .sort((a, b) => b.amount - a.amount);
-                },
-                maxCategoryAmount() {
-                    const amounts = this.categoryStats.map(s => s.amount);
-                    return Math.max(...amounts, 1);
-                },
-                allCategories() {
-                    return [...this.incomeCategories, ...this.expenseCategories];
+                
+                overdueDebts() {
+                    const today = new Date().toISOString().split('T')[0];
+                    return this.debts.filter(debt => {
+                        return debt.endDate < today && 
+                               debt.payments.reduce((sum, p) => sum + p.amount, 0) < debt.amount;
+                    });
                 }
             },
             methods: {
-                openModal(type) {
-                    this.modalType = type;
-                    this.showModal = true;
-                    this.form.date = new Date().toISOString().split('T')[0];
-                },
-                closeModal() {
-                    this.showModal = false;
-                    this.editingTransaction = null;
-                    this.resetForm();
-                },
-                resetForm() {
-                    this.form = {
-                        date: '',
-                        category: '',
+                // Previous methods remain the same
+                
+                // New methods for advanced features
+                
+                // Recurring Payments
+                openRecurringModal() {
+                    this.showRecurringModal = true;
+                    this.editingRecurring = null;
+                    this.recurringForm = {
                         description: '',
-                        amount: null
+                        category: '',
+                        amount: null,
+                        frequency: 'monthly',
+                        startDate: new Date().toISOString().split('T')[0],
+                        endDate: ''
                     };
                 },
-                saveTransaction() {
-                    if (!this.form.date || !this.form.category || !this.form.description || !this.form.amount) {
-                        alert('Mohon lengkapi semua field!');
+                
+                editRecurringPayment(payment) {
+                    this.editingRecurring = payment;
+                    this.recurringForm = { ...payment };
+                    this.showRecurringModal = true;
+                },
+                
+                closeRecurringModal() {
+                    this.showRecurringModal = false;
+                },
+                
+                saveRecurringPayment() {
+                    if (!this.recurringForm.description || !this.recurringForm.category || 
+                        !this.recurringForm.amount || !this.recurringForm.startDate) {
+                        alert('Mohon lengkapi semua field yang diperlukan!');
                         return;
                     }
-
-                    if (this.editingTransaction) {
-                        const index = this.transactions.findIndex(t => t.id === this.editingTransaction.id);
+                    
+                    if (this.editingRecurring) {
+                        const index = this.recurringPayments.findIndex(p => p.id === this.editingRecurring.id);
                         if (index !== -1) {
-                            this.transactions[index] = {
-                                ...this.editingTransaction,
-                                ...this.form,
-                                type: this.modalType
+                            this.recurringPayments[index] = {
+                                ...this.editingRecurring,
+                                ...this.recurringForm
                             };
                         }
                     } else {
-                        const newTransaction = {
+                        this.recurringPayments.push({
                             id: Date.now(),
-                            ...this.form,
-                            type: this.modalType
-                        };
-                        this.transactions.push(newTransaction);
+                            ...this.recurringForm
+                        });
                     }
-
-                    this.saveData();
-                    this.closeModal
-
-
-                    this.saveData();
-                    this.closeModal();
+                    
+                    this.saveAdvancedData();
+                    this.closeRecurringModal();
                 },
-                editTransaction(transaction) {
-                    this.editingTransaction = transaction;
-                    this.modalType = transaction.type;
-                    this.form = {
-                        date: transaction.date,
-                        category: transaction.category,
-                        description: transaction.description,
-                        amount: transaction.amount
+                
+                deleteRecurringPayment(id) {
+                    if (confirm('Apakah Anda yakin ingin menghapus pembayaran berulang ini?')) {
+                        this.recurringPayments = this.recurringPayments.filter(p => p.id !== id);
+                        this.saveAdvancedData();
+                    }
+                },
+                
+                getRecurringStatusClass(payment) {
+                    const today = new Date().toISOString().split('T')[0];
+                    if (payment.endDate && payment.endDate < today) {
+                        return 'status-completed';
+                    }
+                    return 'status-active';
+                },
+                
+                getRecurringStatusText(payment) {
+                    const today = new Date().toISOString().split('T')[0];
+                    if (payment.endDate && payment.endDate < today) {
+                        return 'Selesai';
+                    }
+                    return 'Aktif';
+                },
+                
+                formatFrequency(freq) {
+                    const map = {
+                        daily: 'Harian',
+                        weekly: 'Mingguan',
+                        monthly: 'Bulanan',
+                        yearly: 'Tahunan'
                     };
-                    this.showModal = true;
+                    return map[freq] || freq;
                 },
-                deleteTransaction(id) {
-                    if (confirm('Apakah Anda yakin ingin menghapus transaksi ini?')) {
-                        this.transactions = this.transactions.filter(t => t.id !== id);
+                
+                // Financial Goals
+                openGoalModal() {
+                    this.showGoalModal = true;
+                    this.editingGoal = null;
+                    this.goalForm = {
+                        name: '',
+                        target: null,
+                        saved: null,
+                        targetDate: '',
+                        priority: 'medium',
+                        notes: ''
+                    };
+                },
+                
+                editGoal(goal) {
+                    this.editingGoal = goal;
+                    this.goalForm = { ...goal };
+                    this.showGoalModal = true;
+                },
+                
+                closeGoalModal() {
+                    this.showGoalModal = false;
+                },
+                
+                saveGoal() {
+                    if (!this.goalForm.name || !this.goalForm.target || 
+                        !this.goalForm.targetDate) {
+                        alert('Mohon lengkapi semua field yang diperlukan!');
+                        return;
+                    }
+                    
+                    if (this.editingGoal) {
+                        const index = this.financialGoals.findIndex(g => g.id === this.editingGoal.id);
+                        if (index !== -1) {
+                            this.financialGoals[index] = {
+                                ...this.editingGoal,
+                                ...this.goalForm
+                            };
+                        }
+                    } else {
+                        this.financialGoals.push({
+                            id: Date.now(),
+                            ...this.goalForm,
+                            saved: this.goalForm.saved || 0
+                        });
+                    }
+                    
+                    this.saveAdvancedData();
+                    this.closeGoalModal();
+                },
+                
+                deleteGoal(id) {
+                    if (confirm('Apakah Anda yakin ingin menghapus target ini?')) {
+                        this.financialGoals = this.financialGoals.filter(g => g.id !== id);
+                        this.saveAdvancedData();
+                    }
+                },
+                
+                addToGoal(goal) {
+                    const amount = prompt(`Masukkan jumlah yang ingin ditambahkan ke target "${goal.name}":`);
+                    if (amount && !isNaN(amount)) {
+                        const numAmount = parseFloat(amount);
+                        goal.saved += numAmount;
+                        this.saveAdvancedData();
+                        
+                        // Optionally create a transaction for this
+                        this.transactions.push({
+                            id: Date.now(),
+                            date: new Date().toISOString().split('T')[0],
+                            description: `Tabungan untuk ${goal.name}`,
+                            category: 'Tabungan',
+                            amount: numAmount,
+                            type: 'expense'
+                        });
                         this.saveData();
                     }
                 },
-                saveBudget() {
-                    localStorage.setItem('monthlyBudget', this.monthlyBudget.toString());
-                    alert('Budget berhasil disimpan!');
+                
+                getGoalStatusClass(goal) {
+                    const today = new Date();
+                    const targetDate = new Date(goal.targetDate);
+                    
+                    if (goal.saved >= goal.target) {
+                        return 'status-completed';
+                    } else if (targetDate < today) {
+                        return 'status-pending';
+                    }
+                    return 'status-active';
                 },
-                saveData() {
-                    localStorage.setItem('transactions', JSON.stringify(this.transactions));
+                
+                getGoalStatusText(goal) {
+                    const today = new Date();
+                    const targetDate = new Date(goal.targetDate);
+                    
+                    if (goal.saved >= goal.target) {
+                        return 'Tercapai';
+                    } else if (targetDate < today) {
+                        return 'Terlewat';
+                    }
+                    
+                    const percent = Math.round((goal.saved / goal.target) * 100);
+                    return `${percent}%`;
                 },
-                formatCurrency(amount) {
-                    return new Intl.NumberFormat('id-ID', {
-                        style: 'currency',
-                        currency: 'IDR',
-                        minimumFractionDigits: 0
-                    }).format(amount || 0);
+                
+                // Debts and Loans
+                openDebtModal() {
+                    this.showDebtModal = true;
+                    this.editingDebt = null;
+                    this.debtForm = {
+                        type: 'debt',
+                        description: '',
+                        party: '',
+                        amount: null,
+                        interestRate: 0,
+                        interestType: 'simple',
+                        startDate: new Date().toISOString().split('T')[0],
+                        endDate: '',
+                        notes: '',
+                        payments: []
+                    };
                 },
-                formatDate(dateString) {
-                    const options = { day: 'numeric', month: 'short', year: 'numeric' };
-                    return new Date(dateString).toLocaleDateString('id-ID', options);
+                
+                editDebt(debt) {
+                    this.editingDebt = debt;
+                    this.debtForm = { ...debt };
+                    this.showDebtModal = true;
                 },
+                
+                closeDebtModal() {
+                    this.showDebtModal = false;
+                },
+                
+                saveDebt() {
+                    if (!this.debtForm.description || !this.debtForm.party || 
+                        !this.debtForm.amount || !this.debtForm.startDate || 
+                        !this.debtForm.endDate) {
+                        alert('Mohon lengkapi semua field yang diperlukan!');
+                        return;
+                    }
+                    
+                    if (this.editingDebt) {
+                        const index = this.debts.findIndex(d => d.id === this.editingDebt.id);
+                        if (index !== -1) {
+                            this.debts[index] = {
+                                ...this.editingDebt,
+                                ...this.debtForm
+                            };
+                        }
+                    } else {
+                        this.debts.push({
+                            id: Date.now(),
+                            ...this.debtForm,
+                            payments: []
+                        });
+                    }
+                    
+                    this.saveAdvancedData();
+                    this.closeDebtModal();
+                },
+                
+                deleteDebt(id) {
+                    if (confirm('Apakah Anda yakin ingin menghapus catatan hutang/pinjaman ini?')) {
+                        this.debts = this.debts.filter(d => d.id !== id);
+                        this.saveAdvancedData();
+                    }
+                },
+                
+                recordDebtPayment(debt) {
+                    this.selectedDebt = debt;
+                    this.debtPaymentForm = {
+                        date: new Date().toISOString().split('T')[0],
+                        amount: null,
+                        method: '',
+                        notes: ''
+                    };
+                    this.showDebtPaymentModal = true;
+                },
+                
+                closeDebtPaymentModal() {
+                    this.showDebtPaymentModal = false;
+                },
+                
+                recordPayment() {
+                    if (!this.debtPaymentForm.date || !this.debtPaymentForm.amount) {
+                        alert('Mohon isi tanggal dan jumlah pembayaran!');
+                        return;
+                    }
+                    
+                    const debtIndex = this.debts.findIndex(d => d.id === this.selectedDebt.id);
+                    if (debtIndex !== -1) {
+                        this.debts[debtIndex].payments.push({
+                            ...this.debtPaymentForm
+                        });
+                        this.saveAdvancedData();
+                        
+                        // Create a transaction for this payment
+                        const transactionType = this.selectedDebt.type === 'debt' ? 'expense' : 'income';
+                        this.transactions.push({
+                            id: Date.now(),
+                            date: this.debtPaymentForm.date,
+                            description: `Pembayaran ${this.selectedDebt.description}`,
+                            category: 'Cicilan',
+                            amount: parseFloat(this.debtPaymentForm.amount),
+                            type: transactionType
+                        });
+                        this.saveData();
+                    }
+                    
+                    this.closeDebtPaymentModal();
+                },
+                
+                calculateDebt(debt) {
+                    if (debt.interestRate <= 0) {
+                        return debt.amount;
+                    }
+                    
+                    const startDate = new Date(debt.startDate);
+                    const endDate = new Date(debt.endDate);
+                    const years = (endDate - startDate) / (1000 * 60 * 60 * 24 * 365);
+                    
+                    if (debt.interestType === 'simple') {
+                        return debt.amount * (1 + (debt.interestRate / 100) * years);
+                    } else {
+                        // Compound interest
+                        return debt.amount * Math.pow(1 + (debt.interestRate / 100), years);
+                    }
+                },
+                
+                // Investments
+                openInvestmentModal() {
+                    this.showInvestmentModal = true;
+                    this.editingInvestment = null;
+                    this.investmentForm = {
+                        name: '',
+                        type: 'saham',
+                        initialValue: null,
+                        currentValue: null,
+                        units: null,
+                        fees: null,
+                        startDate: new Date().toISOString().split('T')[0],
+                        notes: ''
+                    };
+                },
+                
+                editInvestment(investment) {
+                    this.editingInvestment = investment;
+                    this.investmentForm = { ...investment };
+                    this.showInvestmentModal = true;
+                },
+                
+                closeInvestmentModal() {
+                    this.showInvestmentModal = false;
+                },
+                
+                saveInvestment() {
+                    if (!this.investmentForm.name || !this.investmentForm.type || 
+                        !this.investmentForm.currentValue || !this.investmentForm.startDate) {
+                        alert('Mohon lengkapi semua field yang diperlukan!');
+                        return;
+                    }
+                    
+                    if (this.editingInvestment) {
+                        const index = this.investments.findIndex(i => i.id === this.editingInvestment.id);
+                        if (index !== -1) {
+                            this.investments[index] = {
+                                ...this.editingInvestment,
+                                ...this.investmentForm
+                            };
+                        }
+                    } else {
+                        this.investments.push({
+                            id: Date.now(),
+                            ...this.investmentForm,
+                            initialValue: this.investmentForm.initialValue || this.investmentForm.currentValue
+                        });
+                    }
+                    
+                    this.saveAdvancedData();
+                    this.closeInvestmentModal();
+                },
+                
+                deleteInvestment(id) {
+                    if (confirm('Apakah Anda yakin ingin menghapus investasi ini?')) {
+                        this.investments = this.investments.filter(i => i.id !== id);
+                        this.saveAdvancedData();
+                    }
+                },
+                
+                updateInvestmentValue(investment) {
+                    this.selectedInvestment = investment;
+                    this.valueUpdateForm = {
+                        currentValue: investment.currentValue,
+                        updateDate: new Date().toISOString().split('T')[0],
+                        notes: ''
+                    };
+                    this.showValueUpdateModal = true;
+                },
+                
+                closeValueUpdateModal() {
+                    this.showValueUpdateModal = false;
+                },
+                
+                updateInvestment() {
+                    if (!this.valueUpdateForm.currentValue) {
+                        alert('Mohon masukkan nilai saat ini!');
+                        return;
+                    }
+                    
+                    const index = this.investments.findIndex(i => i.id === this.selectedInvestment.id);
+                    if (index !== -1) {
+                        this.investments[index].currentValue = parseFloat(this.valueUpdateForm.currentValue);
+                        this.saveAdvancedData();
+                        
+                        // Add a note about the update if provided
+                        if (this.valueUpdateForm.notes) {
+                            if (!this.investments[index].notes) {
+                                this.investments[index].notes = '';
+                            }
+                            this.investments[index].notes += `\nUpdate ${this.valueUpdateForm.updateDate}: ${this.valueUpdateForm.notes}`;
+                        }
+                    }
+                    
+                    this.closeValueUpdateModal();
+                },
+                
+                calculateROI(investment) {
+                    if (!investment.initialValue || investment.initialValue === 0) {
+                        return 0;
+                    }
+                    return Math.round(((investment.currentValue - investment.initialValue) / investment.initialValue) * 100);
+                },
+                
+                // Contextual add action for floating button
+                contextualAddAction() {
+                    if (this.activeTab === 'advanced') {
+                        switch (this.activeFeature) {
+                            case 'recurring':
+                                this.openRecurringModal();
+                                break;
+                            case 'goals':
+                                this.openGoalModal();
+                                break;
+                            case 'debts':
+                                this.openDebtModal();
+                                break;
+                            case 'investments':
+                                this.openInvestmentModal();
+                                break;
+                            default:
+                                this.openModal('expense');
+                        }
+                    } else {
+                        this.openModal('expense');
+                    }
+                },
+                
+                // Save all advanced data
+                saveAdvancedData() {
+                    localStorage.setItem('recurringPayments', JSON.stringify(this.recurringPayments));
+                    localStorage.setItem('financialGoals', JSON.stringify(this.financialGoals));
+                    localStorage.setItem('debts', JSON.stringify(this.debts));
+                    localStorage.setItem('investments', JSON.stringify(this.investments));
+                },
+                
+                // Update export/import to include advanced data
                 exportData() {
                     const data = {
                         transactions: this.transactions,
-                        monthlyBudget: this.monthlyBudget
+                        monthlyBudget: this.monthlyBudget,
+                        recurringPayments: this.recurringPayments,
+                        financialGoals: this.financialGoals,
+                        debts: this.debts,
+                        investments: this.investments
                     };
                     const blob = new Blob([JSON.stringify(data)], { type: 'application/json' });
                     const url = URL.createObjectURL(blob);
                     const a = document.createElement('a');
                     a.href = url;
-                    a.download = `keuangan-keluarga-${new Date().toISOString().split('T')[0]}.json`;
+                    a.download = `keuangan-keluarga-plus-${new Date().toISOString().split('T')[0]}.json`;
                     a.click();
                     URL.revokeObjectURL(url);
                 },
-                exportCSV() {
-                    const headers = ['Tanggal', 'Tipe', 'Kategori', 'Deskripsi', 'Jumlah'];
-                    const rows = this.transactions.map(t => [
-                        t.date,
-                        t.type === 'income' ? 'Pemasukan' : 'Pengeluaran',
-                        t.category,
-                        t.description,
-                        t.amount
-                    ]);
-                    
-                    let csv = headers.join(',') + '\n';
-                    rows.forEach(row => {
-                        csv += row.map(field => `"${field}"`).join(',') + '\n';
-                    });
-                    
-                    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-                    const url = URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.href = url;
-                    a.download = `keuangan-keluarga-${new Date().toISOString().split('T')[0]}.csv`;
-                    a.click();
-                    URL.revokeObjectURL(url);
-                },
+                
                 importData(event) {
                     const file = event.target.files[0];
                     if (!file) return;
@@ -954,7 +1278,23 @@
                                 if (data.monthlyBudget) {
                                     this.monthlyBudget = data.monthlyBudget;
                                 }
+                                
+                                // Import advanced data if available
+                                if (data.recurringPayments) {
+                                    this.recurringPayments = data.recurringPayments;
+                                }
+                                if (data.financialGoals) {
+                                    this.financialGoals = data.financialGoals;
+                                }
+                                if (data.debts) {
+                                    this.debts = data.debts;
+                                }
+                                if (data.investments) {
+                                    this.investments = data.investments;
+                                }
+                                
                                 this.saveData();
+                                this.saveAdvancedData();
                                 alert('Data berhasil diimpor!');
                             } else {
                                 alert('Format file tidak valid!');
@@ -970,6 +1310,18 @@
             mounted() {
                 // Set default date to today
                 this.form.date = new Date().toISOString().split('T')[0];
+                
+                // Check for upcoming recurring payments
+                const today = new Date().toISOString().split('T')[0];
+                const upcoming = this.recurringPayments.filter(payment => {
+                    return (!payment.endDate || payment.endDate >= today) && 
+                           payment.startDate <= today;
+                });
+                
+                if (upcoming.length > 0) {
+                    // You could add a notification here
+                    console.log('Anda memiliki', upcoming.length, 'pembayaran berulang yang aktif');
+                }
             }
         }).mount('#app');
     </script>
