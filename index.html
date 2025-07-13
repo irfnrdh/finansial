@@ -3,11 +3,468 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Keuangan Keluarga Plus</title>
+    <title>Keuangan Keluarga v.1.0.1 </title>
     <script src="https://unpkg.com/vue@3"></script>
     <style>
-        /* Previous styles remain the same, adding new styles for new features */
-        
+           * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+            background: white;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 15px;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+
+        .header p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .nav-tabs {
+            display: flex;
+            background: white;
+            border-bottom: 1px solid #eee;
+            position: sticky;
+            top: 80px;
+            z-index: 99;
+        }
+
+        .nav-tab {
+            flex: 1;
+            padding: 12px 8px;
+            text-align: center;
+            border: none;
+            background: white;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+        }
+
+        .nav-tab.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+            font-weight: 600;
+        }
+
+        .nav-tab:hover {
+            background: #f8f9fa;
+        }
+
+        .tab-content {
+            padding: 15px;
+            min-height: calc(100vh - 140px);
+        }
+
+        .dashboard-cards {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border: 1px solid #f0f0f0;
+        }
+
+        .card h3 {
+            font-size: 0.85rem;
+            color: #666;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .card .amount {
+            font-size: 1.3rem;
+            font-weight: bold;
+        }
+
+        .card.income .amount {
+            color: #28a745;
+        }
+
+        .card.expense .amount {
+            color: #dc3545;
+        }
+
+        .card.balance .amount {
+            color: #667eea;
+        }
+
+        .card.budget .amount {
+            color: #fd7e14;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: #555;
+            font-size: 0.9rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            display: inline-block;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-warning {
+            background: #fd7e14;
+            color: white;
+        }
+
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 0.8rem;
+        }
+
+        .transaction-list {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .transaction-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .transaction-item:last-child {
+            border-bottom: none;
+        }
+
+        .transaction-info {
+            flex: 1;
+        }
+
+        .transaction-info h4 {
+            font-size: 0.9rem;
+            margin-bottom: 2px;
+            color: #333;
+        }
+
+        .transaction-info p {
+            font-size: 0.8rem;
+            color: #666;
+            margin-bottom: 2px;
+        }
+
+        .transaction-amount {
+            font-weight: bold;
+            font-size: 1rem;
+        }
+
+        .transaction-amount.income {
+            color: #28a745;
+        }
+
+        .transaction-amount.expense {
+            color: #dc3545;
+        }
+
+        .transaction-actions {
+            display: flex;
+            gap: 5px;
+            margin-left: 10px;
+        }
+
+        .category-stats {
+            display: grid;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .category-item {
+            background: white;
+            padding: 12px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .category-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+
+        .category-name {
+            font-weight: 500;
+            color: #333;
+        }
+
+        .category-amount {
+            font-weight: bold;
+            color: #dc3545;
+        }
+
+        .category-bar {
+            height: 6px;
+            background: #e9ecef;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .category-bar-fill {
+            height: 100%;
+            background: #667eea;
+            transition: width 0.3s ease;
+        }
+
+        .quick-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .quick-action {
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .quick-action:hover {
+            transform: translateY(-2px);
+        }
+
+        .quick-action .icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .quick-action .title {
+            font-weight: 500;
+            color: #333;
+        }
+
+        .filter-section {
+            background: white;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .filter-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #666;
+        }
+
+        .empty-state .icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            opacity: 0.5;
+        }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            width: 100%;
+            max-width: 400px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #666;
+            padding: 5px;
+        }
+
+        .floating-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            transition: transform 0.3s ease;
+            z-index: 500;
+        }
+
+        .floating-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .budget-progress {
+            margin-top: 10px;
+        }
+
+        .budget-bar {
+            height: 8px;
+            background: #e9ecef;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 5px;
+        }
+
+        .budget-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #28a745 0%, #fd7e14 70%, #dc3545 100%);
+            transition: width 0.3s ease;
+        }
+
+        .budget-text {
+            font-size: 0.8rem;
+            color: #666;
+            text-align: center;
+        }
+
+        @media (max-width: 480px) {
+            .dashboard-cards {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav-tab {
+                font-size: 0.75rem;
+                padding: 10px 5px;
+            }
+        }
         /* New styles for additional features */
         .feature-tabs {
             display: flex;
@@ -163,6 +620,177 @@
                 </button>
             </div>
 
+            <!-- Dashboard Tab -->
+            <div v-show="activeTab === 'dashboard'" class="tab-content">
+                <div class="dashboard-cards">
+                    <div class="card balance">
+                        <h3>Saldo</h3>
+                        <div class="amount">{{ formatCurrency(totalIncome - totalExpense) }}</div>
+                    </div>
+                    <div class="card income">
+                        <h3>Pemasukan</h3>
+                        <div class="amount">{{ formatCurrency(totalIncome) }}</div>
+                    </div>
+                    <div class="card expense">
+                        <h3>Pengeluaran</h3>
+                        <div class="amount">{{ formatCurrency(totalExpense) }}</div>
+                    </div>
+                    <div class="card budget">
+                        <h3>Budget Bulan Ini</h3>
+                        <div class="amount">{{ formatCurrency(monthlyBudget) }}</div>
+                        <div class="budget-progress">
+                            <div class="budget-bar">
+                                <div class="budget-bar-fill" :style="{ width: budgetPercentage + '%' }"></div>
+                            </div>
+                            <div class="budget-text">{{ budgetPercentage }}% terpakai</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="quick-actions">
+                    <div class="quick-action" @click="openModal('income')">
+                        <div class="icon">💰</div>
+                        <div class="title">Tambah Pemasukan</div>
+                    </div>
+                    <div class="quick-action" @click="openModal('expense')">
+                        <div class="icon">💳</div>
+                        <div class="title">Tambah Pengeluaran</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Transaksi Terbaru</h3>
+                    <div class="transaction-list" v-if="recentTransactions.length > 0">
+                        <div class="transaction-item" v-for="transaction in recentTransactions" :key="transaction.id">
+                            <div class="transaction-info">
+                                <h4>{{ transaction.description }}</h4>
+                                <p>{{ transaction.category }} • {{ formatDate(transaction.date) }}</p>
+                            </div>
+                            <div class="transaction-amount" :class="transaction.type">
+                                {{ transaction.type === 'income' ? '+' : '-' }}{{ formatCurrency(transaction.amount) }}
+                            </div>
+                        </div>
+                    </div>
+                    <div v-else class="empty-state">
+                        <div class="icon">📝</div>
+                        <p>Belum ada transaksi</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Transactions Tab -->
+            <div v-show="activeTab === 'transactions'" class="tab-content">
+                <div class="filter-section">
+                    <div class="filter-row">
+                        <select v-model="filter.type" class="form-control">
+                            <option value="">Semua Tipe</option>
+                            <option value="income">Pemasukan</option>
+                            <option value="expense">Pengeluaran</option>
+                        </select>
+                        <select v-model="filter.category" class="form-control">
+                            <option value="">Semua Kategori</option>
+                            <option v-for="category in allCategories" :key="category">{{ category }}</option>
+                        </select>
+                    </div>
+                    <div class="filter-row">
+                        <input v-model="filter.dateFrom" type="date" class="form-control" placeholder="Dari Tanggal">
+                        <input v-model="filter.dateTo" type="date" class="form-control" placeholder="Sampai Tanggal">
+                    </div>
+                </div>
+
+                <div class="transaction-list" v-if="filteredTransactions.length > 0">
+                    <div class="transaction-item" v-for="transaction in filteredTransactions" :key="transaction.id">
+                        <div class="transaction-info">
+                            <h4>{{ transaction.description }}</h4>
+                            <p>{{ transaction.category }} • {{ formatDate(transaction.date) }}</p>
+                        </div>
+                        <div class="transaction-amount" :class="transaction.type">
+                            {{ transaction.type === 'income' ? '+' : '-' }}{{ formatCurrency(transaction.amount) }}
+                        </div>
+                        <div class="transaction-actions">
+                            <button class="btn btn-warning btn-sm" @click="editTransaction(transaction)">✏️</button>
+                            <button class="btn btn-danger btn-sm" @click="deleteTransaction(transaction.id)">🗑️</button>
+                        </div>
+                    </div>
+                </div>
+                <div v-else class="empty-state">
+                    <div class="icon">🔍</div>
+                    <p>Tidak ada transaksi yang ditemukan</p>
+                </div>
+            </div>
+
+            <!-- Budget Tab -->
+            <div v-show="activeTab === 'budget'" class="tab-content">
+                <div class="card">
+                    <h3>Atur Budget Bulanan</h3>
+                    <div class="form-group">
+                        <label>Budget Bulanan</label>
+                        <input v-model.number="monthlyBudget" type="number" class="form-control" placeholder="Masukkan budget bulanan">
+                    </div>
+                    <button class="btn btn-primary" @click="saveBudget">Simpan Budget</button>
+                </div>
+
+                <div class="category-stats">
+                    <div class="category-item" v-for="stat in categoryStats" :key="stat.category">
+                        <div class="category-header">
+                            <div class="category-name">{{ stat.category }}</div>
+                            <div class="category-amount">{{ formatCurrency(stat.amount) }}</div>
+                        </div>
+                        <div class="category-bar">
+                            <div class="category-bar-fill" :style="{ width: (stat.amount / maxCategoryAmount) * 100 + '%' }"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reports Tab -->
+            <div v-show="activeTab === 'reports'" class="tab-content">
+                <div class="card">
+                    <h3>Ringkasan Bulan Ini</h3>
+                    <div class="dashboard-cards">
+                        <div class="card income">
+                            <h3>Total Pemasukan</h3>
+                            <div class="amount">{{ formatCurrency(monthlyIncome) }}</div>
+                        </div>
+                        <div class="card expense">
+                            <h3>Total Pengeluaran</h3>
+                            <div class="amount">{{ formatCurrency(monthlyExpense) }}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Pengeluaran per Kategori</h3>
+                    <div class="category-stats">
+                        <div class="category-item" v-for="stat in categoryStats" :key="stat.category">
+                            <div class="category-header">
+                                <div class="category-name">{{ stat.category }}</div>
+                                <div class="category-amount">{{ formatCurrency(stat.amount) }}</div>
+                            </div>
+                            <div class="category-bar">
+                                <div class="category-bar-fill" :style="{ width: (stat.amount / maxCategoryAmount) * 100 + '%' }"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Export Data</h3>
+                    <div class="quick-actions">
+                        <div class="quick-action" @click="exportData">
+                            <div class="icon">📊</div>
+                            <div class="title">Export JSON</div>
+                        </div>
+                        <div class="quick-action" @click="exportCSV">
+                            <div class="icon">📋</div>
+                            <div class="title">Export CSV</div>
+                        </div>
+                    </div>
+                    <input type="file" @change="importData" accept=".json" style="margin-top: 10px;">
+                </div>
+            </div>
+
+            
             <!-- Previous tabs content remains the same until Advanced Tab -->
 
             <!-- Advanced Tab -->
@@ -674,6 +1302,50 @@
             </div>
 
             <!-- Previous modals remain the same -->
+
+            
+            <!-- Modal -->
+            <div v-if="showModal" class="modal" @click="closeModal">
+                <div class="modal-content" @click.stop>
+                    <div class="modal-header">
+                        <h3 class="modal-title">
+                            {{ modalType === 'income' ? 'Tambah Pemasukan' : 'Tambah Pengeluaran' }}
+                        </h3>
+                        <button class="close-btn" @click="closeModal">&times;</button>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Tanggal</label>
+                        <input v-model="form.date" type="date" class="form-control">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Kategori</label>
+                        <select v-model="form.category" class="form-control">
+                            <option value="">Pilih Kategori</option>
+                            <option v-for="category in (modalType === 'income' ? incomeCategories : expenseCategories)" :key="category">
+                                {{ category }}
+                            </option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Deskripsi</label>
+                        <input v-model="form.description" type="text" class="form-control" placeholder="Masukkan deskripsi">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Jumlah</label>
+                        <input v-model.number="form.amount" type="number" class="form-control" placeholder="Masukkan jumlah">
+                    </div>
+                    
+                    <div class="form-group">
+                        <button class="btn btn-primary" @click="saveTransaction" style="width: 100%;">
+                            {{ editingTransaction ? 'Update' : 'Simpan' }}
+                        </button>
+                    </div>
+                </div>
+            </div>
             
             <!-- Floating Add Button - Updated to show context-aware actions -->
             <button class="floating-btn" @click="contextualAddAction">
@@ -689,7 +1361,33 @@
             data() {
                 return {
                     // Previous data properties remain the same
-                    
+
+                      activeTab: 'dashboard',
+                    showModal: false,
+                    modalType: 'expense',
+                    editingTransaction: null,
+                    transactions: JSON.parse(localStorage.getItem('transactions') || '[]'),
+                    monthlyBudget: parseFloat(localStorage.getItem('monthlyBudget') || '0'),
+                    form: {
+                        date: '',
+                        category: '',
+                        description: '',
+                        amount: null
+                    },
+                    filter: {
+                        type: '',
+                        category: '',
+                        dateFrom: '',
+                        dateTo: ''
+                    },
+                    incomeCategories: [
+                        'Gaji', 'Bonus', 'Freelance', 'Investasi', 'Bisnis', 'Hadiah', 'Lainnya'
+                    ],
+                    expenseCategories: [
+                        'Makan & Minum', 'Transportasi', 'Belanja', 'Hiburan', 'Kesehatan',
+                        'Pendidikan', 'Listrik & Air', 'Internet & Pulsa', 'Cicilan',
+                        'Tabungan', 'Sosial', 'Lainnya'
+                    ],
                     // New data properties for advanced features
                     activeFeature: 'recurring',
                     showRecurringModal: false,
@@ -768,6 +1466,81 @@
             },
             computed: {
                 // Previous computed properties remain the same
+
+                 totalIncome() {
+                    return this.transactions
+                        .filter(t => t.type === 'income')
+                        .reduce((sum, t) => sum + t.amount, 0);
+                },
+                totalExpense() {
+                    return this.transactions
+                        .filter(t => t.type === 'expense')
+                        .reduce((sum, t) => sum + t.amount, 0);
+                },
+                monthlyIncome() {
+                    const currentMonth = new Date().getMonth();
+                    const currentYear = new Date().getFullYear();
+                    return this.transactions
+                        .filter(t => {
+                            const date = new Date(t.date);
+                            return t.type === 'income' && 
+                                   date.getMonth() === currentMonth && 
+                                   date.getFullYear() === currentYear;
+                        })
+                        .reduce((sum, t) => sum + t.amount, 0);
+                },
+                monthlyExpense() {
+                    const currentMonth = new Date().getMonth();
+                    const currentYear = new Date().getFullYear();
+                    return this.transactions
+                        .filter(t => {
+                            const date = new Date(t.date);
+                            return t.type === 'expense' && 
+                                   date.getMonth() === currentMonth && 
+                                   date.getFullYear() === currentYear;
+                        })
+                        .reduce((sum, t) => sum + t.amount, 0);
+                },
+                budgetPercentage() {
+                    if (this.monthlyBudget === 0) return 0;
+                    return Math.min(Math.round((this.monthlyExpense / this.monthlyBudget) * 100), 100);
+                },
+                recentTransactions() {
+                    return this.transactions
+                        .sort((a, b) => new Date(b.date) - new Date(a.date))
+                        .slice(0, 5);
+                },
+                filteredTransactions() {
+                    return this.transactions.filter(t => {
+                        const matchType = !this.filter.type || t.type === this.filter.type;
+                        const matchCategory = !this.filter.category || t.category === this.filter.category;
+                        const matchDateFrom = !this.filter.dateFrom || t.date >= this.filter.dateFrom;
+                        const matchDateTo = !this.filter.dateTo || t.date <= this.filter.dateTo;
+                        return matchType && matchCategory && matchDateFrom && matchDateTo;
+                    }).sort((a, b) => new Date(b.date) - new Date(a.date));
+                },
+                categoryStats() {
+                    const stats = {};
+                    this.transactions
+                        .filter(t => t.type === 'expense')
+                        .forEach(t => {
+                            if (!stats[t.category]) {
+                                stats[t.category] = 0;
+                            }
+                            stats[t.category] += t.amount;
+                        });
+                    
+                    return Object.entries(stats)
+                        .map(([category, amount]) => ({ category, amount }))
+                        .sort((a, b) => b.amount - a.amount);
+                },
+                maxCategoryAmount() {
+                    const amounts = this.categoryStats.map(s => s.amount);
+                    return Math.max(...amounts, 1);
+                },
+                allCategories() {
+                    return [...this.incomeCategories, ...this.expenseCategories];
+                },
                 
                 // New computed properties for advanced features
                 upcomingRecurringPayments() {
@@ -796,7 +1569,152 @@
             },
             methods: {
                 // Previous methods remain the same
-                
+
+                 openModal(type) {
+                    this.modalType = type;
+                    this.showModal = true;
+                    this.form.date = new Date().toISOString().split('T')[0];
+                },
+                closeModal() {
+                    this.showModal = false;
+                    this.editingTransaction = null;
+                    this.resetForm();
+                },
+                resetForm() {
+                    this.form = {
+                        date: '',
+                        category: '',
+                        description: '',
+                        amount: null
+                    };
+                },
+                saveTransaction() {
+                    if (!this.form.date || !this.form.category || !this.form.description || !this.form.amount) {
+                        alert('Mohon lengkapi semua field!');
+                        return;
+                    }
+
+                    if (this.editingTransaction) {
+                        const index = this.transactions.findIndex(t => t.id === this.editingTransaction.id);
+                        if (index !== -1) {
+                            this.transactions[index] = {
+                                ...this.editingTransaction,
+                                ...this.form,
+                                type: this.modalType
+                            };
+                        }
+                    } else {
+                        const newTransaction = {
+                            id: Date.now(),
+                            ...this.form,
+                            type: this.modalType
+                        };
+                        this.transactions.push(newTransaction);
+                    }
+
+                    this.saveData();
+                    this.closeModal
+
+
+                    this.saveData();
+                    this.closeModal();
+                },
+                editTransaction(transaction) {
+                    this.editingTransaction = transaction;
+                    this.modalType = transaction.type;
+                    this.form = {
+                        date: transaction.date,
+                        category: transaction.category,
+                        description: transaction.description,
+                        amount: transaction.amount
+                    };
+                    this.showModal = true;
+                },
+                deleteTransaction(id) {
+                    if (confirm('Apakah Anda yakin ingin menghapus transaksi ini?')) {
+                        this.transactions = this.transactions.filter(t => t.id !== id);
+                        this.saveData();
+                    }
+                },
+                saveBudget() {
+                    localStorage.setItem('monthlyBudget', this.monthlyBudget.toString());
+                    alert('Budget berhasil disimpan!');
+                },
+                saveData() {
+                    localStorage.setItem('transactions', JSON.stringify(this.transactions));
+                },
+                formatCurrency(amount) {
+                    return new Intl.NumberFormat('id-ID', {
+                        style: 'currency',
+                        currency: 'IDR',
+                        minimumFractionDigits: 0
+                    }).format(amount || 0);
+                },
+                formatDate(dateString) {
+                    const options = { day: 'numeric', month: 'short', year: 'numeric' };
+                    return new Date(dateString).toLocaleDateString('id-ID', options);
+                },
+                exportData() {
+                    const data = {
+                        transactions: this.transactions,
+                        monthlyBudget: this.monthlyBudget
+                    };
+                    const blob = new Blob([JSON.stringify(data)], { type: 'application/json' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `keuangan-keluarga-${new Date().toISOString().split('T')[0]}.json`;
+                    a.click();
+                    URL.revokeObjectURL(url);
+                },
+                exportCSV() {
+                    const headers = ['Tanggal', 'Tipe', 'Kategori', 'Deskripsi', 'Jumlah'];
+                    const rows = this.transactions.map(t => [
+                        t.date,
+                        t.type === 'income' ? 'Pemasukan' : 'Pengeluaran',
+                        t.category,
+                        t.description,
+                        t.amount
+                    ]);
+                    
+                    let csv = headers.join(',') + '\n';
+                    rows.forEach(row => {
+                        csv += row.map(field => `"${field}"`).join(',') + '\n';
+                    });
+                    
+                    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `keuangan-keluarga-${new Date().toISOString().split('T')[0]}.csv`;
+                    a.click();
+                    URL.revokeObjectURL(url);
+                },
+                importData(event) {
+                    const file = event.target.files[0];
+                    if (!file) return;
+                    
+                    const reader = new FileReader();
+                    reader.onload = e => {
+                        try {
+                            const data = JSON.parse(e.target.result);
+                            if (data.transactions && Array.isArray(data.transactions)) {
+                                this.transactions = data.transactions;
+                                if (data.monthlyBudget) {
+                                    this.monthlyBudget = data.monthlyBudget;
+                                }
+                                this.saveData();
+                                alert('Data berhasil diimpor!');
+                            } else {
+                                alert('Format file tidak valid!');
+                            }
+                        } catch (error) {
+                            alert('Gagal memproses file: ' + error.message);
+                        }
+                        event.target.value = '';
+                    };
+                    reader.readAsText(file);
+                },
                 // New methods for advanced features
                 
                 // Recurring Payments
